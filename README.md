@@ -16,16 +16,16 @@
 
     ```elixir
     def application do
-      [extra_applications: [:ueberauth_steam]]
+      [extra_applications: [:ueberauth_crowd]]
     end
     ```
 
-1. Add Steam to your Überauth configuration:
+1. Add Crowd to your Überauth configuration:
 
     ```elixir
     config :ueberauth, Ueberauth,
       providers: [
-        steam: {Ueberauth.Strategy.Crowd, []}
+        crowd: {Ueberauth.Strategy.Crowd, []}
       ]
     ```
 
