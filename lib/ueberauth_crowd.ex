@@ -1,18 +1,5 @@
 defmodule UeberauthCrowd do
-  @moduledoc """
-  Documentation for `UeberauthCrowd`.
+  @moduledoc ~S"""
+  Crowd OpenID for Überauth.
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> UeberauthCrowd.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
