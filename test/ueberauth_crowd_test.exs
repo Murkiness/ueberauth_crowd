@@ -7,14 +7,15 @@ defmodule UeberauthCrowdTest do
   describe "handle_request!" do
     setup do
       Application.put_env(:ueberauth, Ueberauth.Strategy.Crowd,
-        endpoint: "https://crowd.example.com/openidserver/op"
+        endpoint: "https://crowd.example.com/openidserver/op",
+        additional_params: ["return_url, param2"]
       )
 
       :ok
     end
 
     test "redirects" do
-      conn = conn(:get, "http://example.com/path")
+      conn = conn(:get, "http://example.com/path", %{})
       conn = Crowd.handle_request!(conn)
 
       assert conn.state == :sent
@@ -22,12 +23,24 @@ defmodule UeberauthCrowdTest do
     end
 
     test "redirects to the right url" do
-      conn = Crowd.handle_request!(conn(:get, "http://example.com/path"))
+      conn = Crowd.handle_request!(conn(:get, "http://example.com/path", %{}))
 
       {"location", location} = List.keyfind(conn.resp_headers, "location", 0)
 
       assert location ==
-               "https://crowd.example.com/openidserver/op?openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.realm=http%3A%2F%2Fexample.com&openid.return_to=http%3A%2F%2Fexample.com%3Freturn_url%3D"
+               "https://crowd.example.com/openidserver/op?openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.realm=http%3A%2F%2Fexample.com&openid.return_to=http%3A%2F%2Fexample.com%3F"
+    end
+
+    test "redirects to the right url with params" do
+      conn =
+        Crowd.handle_request!(
+          conn(:get, "http://example.com/path?return_url=\"/random\"&param2=123", %{})
+        )
+
+      {"location", location} = List.keyfind(conn.resp_headers, "location", 0)
+
+      assert location ==
+               "https://crowd.example.com/openidserver/op?openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.realm=http%3A%2F%2Fexample.com&openid.return_to=http%3A%2F%2Fexample.com%3F"
     end
   end
 
@@ -123,7 +136,7 @@ defmodule UeberauthCrowdTest do
           "openid.identity" => "someone"
         })
 
-      assert conn.assigns == %{crowd_user: "someone", return_url: "/"}
+      assert conn.assigns == %{crowd_user: "someone"}
     end
   end
 end
