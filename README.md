@@ -1,5 +1,7 @@
 # UeberauthCrowd
 
+![Elixir CI](https://github.com/Murkiness/ueberauth_crowd/workflows/Elixir%20CI/badge.svg)
+
 > Crowd OpenID strategy for Überauth.
 
 ## Installation
