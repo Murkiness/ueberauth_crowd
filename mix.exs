@@ -9,7 +9,20 @@ defmodule UeberauthCrowd.MixProject do
       elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+      name: "Überauth Crowd",
+    ]
+  end
+
+  defp package do
+    [
+      name: "ueberauth_crowd",
+      licenses: ["MIT"],
+      maintainers: ["Vladimir Hohrenko", "Nikita Babushkin"],
+      links: %{
+        "GitHub" => "https://github.com/Murkiness/ueberauth_crowd",
+      },
     ]
   end
 
@@ -30,7 +43,8 @@ defmodule UeberauthCrowd.MixProject do
 
       # Code Maintenance
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.6", only: [:test, :dev], runtime: false}
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:test, :dev], runtime: false},
+      {:ex_doc, "~> 0.15", only: :dev, runtime: false}
     ]
   end
 end
