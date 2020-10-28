@@ -30,7 +30,7 @@ defmodule UeberauthCrowd.MixProject do
 
       # Code Maintenance
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.6", only: [:test, :dev], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:test, :dev], runtime: false}
     ]
   end
 end

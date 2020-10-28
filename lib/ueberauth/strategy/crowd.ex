@@ -10,15 +10,15 @@ defmodule Ueberauth.Strategy.Crowd do
 
   @spec handle_request!(Plug.Conn.t()) :: Plug.Conn.t()
   def handle_request!(conn) do
-    return_url = Map.get(conn.params, "return_url")
     cb_url = callback_url(conn)
-    return_url = cb_url <> "?return_url=#{return_url}"
+    query = Map.take(conn.params, get_additional_param_list()) |> URI.encode_query()
+    return_to = URI.merge(URI.parse(cb_url), %URI{query: query}) |> URI.to_string()
 
     query =
       %{
         "openid.mode" => "checkid_setup",
         "openid.realm" => cb_url,
-        "openid.return_to" => return_url,
+        "openid.return_to" => return_to,
         "openid.ns" => "http://specs.openid.net/auth/2.0",
         "openid.claimed_id" => "http://specs.openid.net/auth/2.0/identifier_select",
         "openid.identity" => "http://specs.openid.net/auth/2.0/identifier_select"
@@ -42,7 +42,7 @@ defmodule Ueberauth.Strategy.Crowd do
 
         conn
         |> assign(:crowd_user, user_name)
-        |> assign(:return_url, Map.get(params, "return_url", "/"))
+        |> assign_params_to(params)
 
       false ->
         set_errors!(conn, [error("invalid_user", "Invalid user")])
@@ -115,6 +115,24 @@ defmodule Ueberauth.Strategy.Crowd do
     |> Enum.into(%{})
     |> Map.put("openid.mode", "check_authentication")
     |> URI.encode_query()
+  end
+
+  defp assign_params_to(conn, params) do
+    get_additional_param_list()
+    |> Enum.reduce(conn, fn p, acc ->
+      val = Map.get(params, p)
+
+      if val do
+        assign(acc, String.to_atom(p), val)
+      else
+        acc
+      end
+    end)
+  end
+
+  defp get_additional_param_list do
+    Application.get_env(:ueberauth, Ueberauth.Strategy.Crowd)
+    |> Keyword.get(:additional_params, [])
   end
 
   defp endpoint do
