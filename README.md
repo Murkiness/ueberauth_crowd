@@ -1,5 +1,6 @@
 # UeberauthCrowd
 
+[![Hex.pm](https://img.shields.io/hexpm/v/ueberauth_steam.svg "Hex")](https://hex.pm/packages/ueberauth_crowd)
 ![Elixir CI](https://github.com/Murkiness/ueberauth_crowd/workflows/Elixir%20CI/badge.svg)
 
 > Crowd OpenID strategy for Überauth.
