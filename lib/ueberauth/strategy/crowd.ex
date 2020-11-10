@@ -10,7 +10,7 @@ defmodule Ueberauth.Strategy.Crowd do
 
   @spec handle_request!(Plug.Conn.t()) :: Plug.Conn.t()
   def handle_request!(conn) do
-    cb_url = callback_url(conn)
+    cb_url = custom_callback().(conn) || callback_url(conn)
     query = Map.take(conn.params, get_additional_param_list()) |> URI.encode_query()
     return_to = URI.merge(URI.parse(cb_url), %URI{query: query}) |> URI.to_string()
 
@@ -137,5 +137,10 @@ defmodule Ueberauth.Strategy.Crowd do
 
   defp endpoint do
     Application.fetch_env!(:ueberauth, Ueberauth.Strategy.Crowd) |> Keyword.get(:endpoint)
+  end
+
+  defp custom_callback do
+    Application.get_env(:ueberauth, Ueberauth.Strategy.Crowd)
+    |> Keyword.get(:cb_func, fn _conn -> nil end)
   end
 end
