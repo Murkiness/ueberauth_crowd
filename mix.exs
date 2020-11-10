@@ -5,13 +5,13 @@ defmodule UeberauthCrowd.MixProject do
     [
       app: :ueberauth_crowd,
       description: "Crowd OpenID Strategy for Überauth.",
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      name: "Überauth Crowd",
+      name: "Überauth Crowd"
     ]
   end
 
@@ -21,8 +21,8 @@ defmodule UeberauthCrowd.MixProject do
       licenses: ["MIT"],
       maintainers: ["Vladimir Hohrenko", "Nikita Babushkin"],
       links: %{
-        "GitHub" => "https://github.com/Murkiness/ueberauth_crowd",
-      },
+        "GitHub" => "https://github.com/Murkiness/ueberauth_crowd"
+      }
     ]
   end
 
