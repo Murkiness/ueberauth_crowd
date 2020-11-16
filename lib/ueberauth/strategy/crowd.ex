@@ -58,7 +58,6 @@ defmodule Ueberauth.Strategy.Crowd do
   @spec handle_cleanup!(Plug.Conn.t()) :: Plug.Conn.t()
   def handle_cleanup!(conn) do
     conn
-    |> assign(:crowd_user, nil)
   end
 
   @spec uid(Plug.Conn.t()) :: pos_integer
