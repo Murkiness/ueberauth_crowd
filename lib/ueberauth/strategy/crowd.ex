@@ -10,8 +10,10 @@ defmodule Ueberauth.Strategy.Crowd do
 
   @spec handle_request!(Plug.Conn.t()) :: Plug.Conn.t()
   def handle_request!(conn) do
+    state = conn.private[:ueberauth_state_param]
     cb_url = custom_callback().(conn) || callback_url(conn)
-    query = Map.take(conn.params, get_additional_param_list()) |> URI.encode_query()
+    csrf_params = if is_nil(state), do: %{}, else: %{state: state}
+    query = Map.take(conn.params, get_additional_param_list()) |> Map.merge(csrf_params) |> URI.encode_query()
     return_to = URI.merge(URI.parse(cb_url), %URI{query: query}) |> URI.to_string()
 
     query =

@@ -36,7 +36,7 @@ defmodule UeberauthCrowd.MixProject do
     [
       # Dependencies
       {:httpoison, "~> 1.7.0"},
-      {:ueberauth, "~> 0.6"},
+      {:ueberauth, "~> 0.7"},
 
       # Testing
       {:meck, "~> 0.8.4", only: :test},
